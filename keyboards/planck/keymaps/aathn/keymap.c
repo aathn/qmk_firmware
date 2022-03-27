@@ -33,9 +33,12 @@ enum planck_keycodes {
   COLEMAK,
   DVORAK,
   PLOVER,
+  MUSIC,
   BACKLIT,
   EXT_PLV
 };
+
+float music_button_song[][2] = STARTUP_SONG;
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
@@ -102,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Brite|  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      |      |      |      |
+ * | Music|  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Play | Prev | Next |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -110,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_planck_grid(
   KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   _______, _______, _______, _______, _______,
-  BACKLIT, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, _______,
+  MUSIC, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, _______,
   KC_MPLY, KC_MPRV, KC_MNXT, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
@@ -199,6 +202,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         set_single_persistent_default_layer(_DVORAK);
       }
+      return false;
+      break;
+    case MUSIC:
+      #ifdef AUDIO_ENABLE
+        if (record->event.pressed) {
+          PLAY_SONG(music_button_song);
+        }
+      #endif
       return false;
       break;
     case BACKLIT:
