@@ -1,0 +1,3 @@
+guix shell arm-none-eabi-nano-toolchain avr-toolchain dfu-programmer dfu-util
+qmk compile [-kb KEYBOARD]
+sudo -E qmk flash [-kb KEYBOARD]
